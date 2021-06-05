@@ -6,7 +6,6 @@ Current supported languages: `English`, and `Japanese (Romaji)`
 
 # Dependencies
  - Python 2
- - Flask
  - OpenCV
  - Numpy
  - PIL (Python Image Library)
@@ -17,7 +16,7 @@ Current supported languages: `English`, and `Japanese (Romaji)`
 #### Step 1. Start Flask app
 
 ```
-python2 index.py
+python3 index.py
 ```
 
 #### Step 2. Click upload then wait for the result
