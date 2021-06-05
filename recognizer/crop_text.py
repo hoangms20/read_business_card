@@ -120,6 +120,7 @@ def find_components(edges, max_components=16):
     while count > 16:
         n = n + 1
         dilated_image = dilation(edges, N=3, iterations=n)
+        dilated_image = dilated_image.astype(np.uint8)
         contours, hierarchy = cv2.findContours(dilated_image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         count = len(contours)
     # print dilation
@@ -220,20 +221,6 @@ def pad_crop(crop, contours, edges, border_contour, pad_px=15):
         return crop
 
 
-# def downscale_image(im, max_dim=2048):
-#     """Shrink im until its longest dimension is <= max_dim.
-
-#     Returns new_image, scale (where scale <= 1).
-#     """
-#     a, b = im.size
-#     if max(a, b) <= max_dim:
-#         return 1.0, im
-
-#     scale = 1.0 * max_dim / max(a, b)
-#     new_im = im.resize((int(a * scale), int(b * scale)), Image.ANTIALIAS)
-#     return scale, new_im
-
-
 def process_image_without_save(im, scale=1):
     # edges = cv2.Canny(np.asarray(im), 100, 200)
     im2 = cv2.bilateralFilter(im, 9, 25, 175)
@@ -258,7 +245,6 @@ def process_image_without_save(im, scale=1):
 
     contours = find_components(edges)
     if len(contours) == 0:
-        # print '%s -> (no text!)' % path
         return
 
     crop = find_optimal_components_subset(contours, edges)
@@ -266,91 +252,11 @@ def process_image_without_save(im, scale=1):
 
     if scale != 1:
         crop = [int(x / scale) for x in crop]  # upscale to the original image size.
-    # draw = ImageDraw.Draw(im)
-    # c_info = props_for_contours(contours, edges)
-    # for c in c_info:
-    #    this_crop = c['x1'], c['y1'], c['x2'], c['y2']
-    #    draw.rectangle(this_crop, outline='blue')
-    # draw.rectangle(crop, outline='red')
-    # im.save(out_path)
-    # draw.text((50, 50), path, fill='red')
-    # orig_im.save(out_path)
-    # im.show()
-    # text_im = im.crop(crop)
-    # Crop from x, y, w, h -> 100, 200, 300, 400
-    # NOTE: its img[y: y + h, x: x + w] and *not* img[x: x + w, y: y + h]
-    # text_im = im[crop[1]: crop[3], crop[0]: crop[2]]
-    # return text_im
+
     return crop
 
-
-# def process_image(path, out_path):
-#     orig_im = Image.open(path)
-#     scale, im = downscale_image(orig_im)
-
-#     edges = cv2.Canny(np.asarray(im), 100, 200)
-
-#     # TODO: dilate image _before_ finding a border. This is crazy sensitive!
-#     contours, hierarchy = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-#     borders = find_border_components(contours, edges)
-#     borders.sort(key=lambda i_x1_y1_x2_y21: (i_x1_y1_x2_y21[3] - i_x1_y1_x2_y21[1]) * (i_x1_y1_x2_y21[4] - i_x1_y1_x2_y21[2]))
-
-#     border_contour = None
-#     if len(borders):
-#         border_contour = contours[borders[0][0]]
-#         edges = remove_border(border_contour, edges)
-
-#     edges = 255 * (edges > 0).astype(np.uint8)
-
-#     # Remove ~1px borders using a rank filter.
-#     maxed_rows = rank_filter(edges, -4, size=(1, 20))
-#     maxed_cols = rank_filter(edges, -4, size=(20, 1))
-#     debordered = np.minimum(np.minimum(edges, maxed_rows), maxed_cols)
-#     edges = debordered
-
-#     contours = find_components(edges)
-#     if len(contours) == 0:
-#         print('%s -> (no text!)' % path)
-#         return
-
-#     crop = find_optimal_components_subset(contours, edges)
-#     crop = pad_crop(crop, contours, edges, border_contour)
-
-#     crop = [int(x / scale) for x in crop]  # upscale to the original image size.
-#     # draw = ImageDraw.Draw(im)
-#     # c_info = props_for_contours(contours, edges)
-#     # for c in c_info:
-#     #    this_crop = c['x1'], c['y1'], c['x2'], c['y2']
-#     #    draw.rectangle(this_crop, outline='blue')
-#     # draw.rectangle(crop, outline='red')
-#     # im.save(out_path)
-#     # draw.text((50, 50), path, fill='red')
-#     # orig_im.save(out_path)
-#     # im.show()
-#     print('crop', crop)
-#     text_im = orig_im.crop(crop)
-#     text_im.save(out_path)
-#     print('%s -> %s' % (path, out_path))
-
-
-
-# if __name__ == '__main__':
-#     if len(sys.argv) == 2 and '*' in sys.argv[1]:
-#         files = glob.glob(sys.argv[1])
-#         random.shuffle(files)
-#     else:
-#         files = sys.argv[1:]
-#
-#     for path in files:
-#         out_path = path.replace('.jpg', '.crop.png')
-#         if os.path.exists(out_path): continue
-#         try:
-#             process_image(path, out_path)
-#         except Exception as e:
-#             print '%s %s' % (path, e)
 if __name__ == "__main__":
     
-    # app.run()
     sample_path = 'recognizer/r_1.jpg'
     orig_im = Image.open(sample_path)
     # extract_2(sample_path)
