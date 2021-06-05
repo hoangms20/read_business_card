@@ -1,4 +1,3 @@
-from json import JSONEncoder
 
 
 class Contact(object):
@@ -12,5 +11,4 @@ class Contact(object):
         self.addr = []
         self.other_info = {}
 
-    # def __str__(self):
-    #     return JSONEncoder.encode(self)
+
