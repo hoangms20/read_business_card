@@ -11,7 +11,7 @@ with open(path + '/../data/common_prefix_suffix_company') as company_tokens:
 
 
 def is_company_name(line):
-    line = line.decode('utf8').lower().split(' ')
+    line = line.encode().decode('utf8').lower().split(' ')
     for token in common_company_tokens:
         if line.__contains__(token):
             return True
