@@ -27,7 +27,7 @@ import cv2
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Users\Admin\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
 
-"""
+
 root = Tk()
   
 # fixing geometry of GUI
@@ -35,56 +35,40 @@ root.geometry('800x500')
 root.maxsize(1000, 500)
 root.minsize(600, 500)
 root.title('Visiting card scanner')
-  
-# function for uploading file to GUI
-def upload_file():        
-    global filename
-    global start, last
-    filename = filedialog.askopenfilename(
-        initialdir="/", title="Select a card image",
-        filetypes=(("jpeg files", "*.jpg"), ("png files", "*.png")))
-      
-    if filename == '':
-        t.delete(1.0, END)
-        t.insert(1.0, 'You have not provided any image to convert')
-        tmsg.showwarning(
-            title = 'Alert!', message = 'Please provide proper formatted image')
-        return
-        
-    else:
-        p_label_var.set('Image uploaded successfully')
-        l.config(fg='#0CDD19')
-      
-    if filename.endswith('.JPG') or filename.endswith('.JPEG') or filename.endswith('.jpg') or filename.endswith('.jpeg') or filename.endswith('.PNG') or filename.endswith('.png'):
-        filename_rev = filename[::-1]
-        last = filename.index('.')
-        start = len(filename) - filename_rev.index('/') - 1
-  
-# function for conversion
-def convert():        
-    try:
-        c_label_var.set('Output...')
-        gray = cv2.cvtColor(src = filename, code = cv2.COLOR_BGR2GRAY)
-        text = pytesseract.image_to_string(gray)
-        t.delete(1.0, END)
-        t.insert(1.0, text)
-        root1 = Toplevel()
-        root1.title('Uploaded image')
-        img1 = ImageTk.PhotoImage(Image.open(filename))
-        Label(root1, image=img1).pack()
-        root1.mainloop()
-    except:
-        t.delete(1.0, END)
-        t.insert(1.0, 'You have not provided any image to convert')
-        tmsg.showwarning(
-            title='Alert!', message='Please provide proper formatted image')
-        return
-    # f_name = filename[start+1:last]+'.txt'
-    # f_name = os.path.join(r'Database', f_name)
-    # f = open(f_name, 'w')
-    # f.write(text)
-    # f.close()
-  
+
+#upload file
+def upload_file():
+    filename = filedialog.askopenfilename(initialdir=os.getcwd(),
+        title="Select Image File", 
+        filetypes=(("JPG File", "*.jpg"), ("PNG File", "*.png"), ("All File", "*.*")))
+    img = ImageTk.PhotoImage(Image.open(filename))
+    root1 = Toplevel()
+    root1.title("Image")
+    print(filename)
+    img2 = cv2.imread(filename)
+    gray = cv2.cvtColor(img2, code = cv2.COLOR_BGR2GRAY)
+    text = pytesseract.image_to_string(gray)
+    t.delete(1.0, END)
+    t.insert(1.0, text)
+    Label(root1, image=img).pack()
+    root1.mainloop() 
+
+
+    #if	filename == '':
+
+def convert():
+    # gray = cv2.cvtColor(src = filename, code = cv2.COLOR_BGR2GRAY)
+	# text = pytesseract.image_to_string(filename)
+	# t.delete(1.0, END)
+	# t.insert(1.0, text)
+	# root1 = Toplevel()
+	# root1.title('Uploaded image')
+	# img1 = ImageTk.PhotoImage(Image.open(filename))
+	# Label(root1, image=img1).pack()
+	# root1.mainloop()
+    return
+
+
 # Menu bar and navigation tab creation
 mainmenu = Menu(root)
 mainmenu.config(font = ('Times', 29))
@@ -124,19 +108,19 @@ c_label.pack(side='bottom', anchor='w')
 Button(root, text='Scan and Convert', bg='#F58D4B', font=('Times', 15),
        width=70, command=convert).pack(pady='10', side='bottom')
 root.mainloop()
-"""
 
-if __name__ == "__main__":
-    # app.run()
-    sample_path = 'samples/bc_ref/r_13.jpg'
-    #sample_path = 'card.png'
-    # extract_2(sample_path)
-    # sample_path = 'samples/BC_5.jpg'
 
-    # sample_path = 'business_cards/Droid/010.jpg'
-    contact = recognize_contact(sample_path)
-    print((' ' * 30))
-    print((' * ' * 30))
-    print((jsonpickle.encode(contact)))
-    print((' * ' * 30))
+# if __name__ == "__main__":
+#     # app.run()
+#     sample_path = 'samples/bc_ref/r_13.jpg'
+#     #sample_path = 'card.png'
+#     # extract_2(sample_path)
+#     # sample_path = 'samples/BC_5.jpg'
+
+#     # sample_path = 'business_cards/Droid/010.jpg'
+#     contact = recognize_contact(sample_path)
+#     print((' ' * 30))
+#     print((' * ' * 30))
+#     print((jsonpickle.encode(contact)))
+#     print((' * ' * 30))
 
