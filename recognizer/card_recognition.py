@@ -18,13 +18,20 @@ from .contact import Contact
 
 DEBUG = False
 
+pytesseract.pytesseract.tesseract_cmd = r'C:\Users\Admin\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
+
 
 def recognize_contact(img_path):
-    txt = extract_2(img_path)
+    txt = extract(img_path)
     tokens = tokenizer(txt)
     contact = Contact()
 
+    for token in tokens:
+        print(token)
+
+    print("****find name****")
     contact.name = name_recog.find_best_guessed_name(tokens)[2]
+    print("****other****")
 
     for token in tokens:
         if is_address(token):
@@ -39,36 +46,42 @@ def recognize_contact(img_path):
             contact.website = token
         if is_company_name(token):
             contact.company = token
+    print("****finished****")
     print(tokens)
     return contact
 
 
-def extract(img_path):
-    txt = pytesseract.image_to_string(Image.open(img_path))
-    return txt
-
 
 # Extract business card border, then recognize text
-def extract_2(img_path):
+def extract(img_path):
     image_size = 500
 
     # Read
     img = cv2.imread(img_path)
-    orig_width, orig_height, _ = img.shape
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    orig_width, orig_height = img.shape
 
     # Make image smaller for faster processing
     scale = orig_width / image_size
     resized_img = cv2.resize(img, (image_size, int(orig_height / scale + 1)), None)
+    cv2.imshow("resized_img",resized_img)
+    cv2.waitKey(0)
 
-    # Crop text region
+    #Crop text region
     cropped = region_detector.crop_text_region(resized_img)
+    cv2.imshow("crop",cropped)
+    cv2.waitKey(0)
 
     # Restore Original region
     orig_crop = [int(round(x * scale)) for x in cropped]
     text_region = img[orig_crop[1]: orig_crop[3], orig_crop[0]: orig_crop[2]]
 
+
     # Convert to Image object to make tesseract happy
     pil_img = Image.fromarray(text_region)
+    #imS = cv2.resize(pil_img, (650, 650))
+    cv2.imshow("output",text_region)
+    cv2.waitKey(0)
     txt = pytesseract.image_to_string(pil_img, lang='eng')
 
     global DEBUG
