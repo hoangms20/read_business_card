@@ -1,6 +1,7 @@
 import cv2
 import jsonpickle
 import pytesseract
+import re
 
 from .pattern_recognition import common_name_recognition as name_recog
 from .pattern_recognition.address_name_recognition import *
@@ -64,13 +65,9 @@ def extract(img_path):
     # Make image smaller for faster processing
     scale = orig_width / image_size
     resized_img = cv2.resize(img, (image_size, int(orig_height / scale + 1)), None)
-    cv2.imshow("resized_img",resized_img)
-    cv2.waitKey(0)
 
     #Crop text region
     cropped = region_detector.crop_text_region(resized_img)
-    cv2.imshow("crop",cropped)
-    cv2.waitKey(0)
 
     # Restore Original region
     orig_crop = [int(round(x * scale)) for x in cropped]
@@ -79,9 +76,6 @@ def extract(img_path):
 
     # Convert to Image object to make tesseract happy
     pil_img = Image.fromarray(text_region)
-    #imS = cv2.resize(pil_img, (650, 650))
-    cv2.imshow("output",text_region)
-    cv2.waitKey(0)
     txt = pytesseract.image_to_string(pil_img, lang='eng')
 
     global DEBUG
