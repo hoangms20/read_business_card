@@ -11,7 +11,7 @@ with open(path + '/../data/common_job_name') as common_job_names:
 
 
 def is_job_title(line):
-    line = line.decode('utf8').lower()
+    line = line.encode().decode('utf8').lower()
     for title in common_job_titles:
         if line.find(title) >= 0:
             return True
