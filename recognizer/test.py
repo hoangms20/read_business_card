@@ -1,15 +1,21 @@
+import glob
+import os
+import random
+import sys
+import random
+import math
+import json
+from collections import defaultdict
+
 import cv2
-
+from PIL import Image
 import numpy as np
+from scipy.ndimage.filters import rank_filter
 
-img = cv2.imread('graimage.png') 
+def process_image_without_save(im, scale=1):
+    # edges = cv2.Canny(np.asarray(im), 100, 200)
+    im2 = cv2.bilateralFilter(im, 9, 25, 175)
 
-img = cv2.resize(img,(400,500))
 
-gray = img.copy()
-
-(thresh, im_bw) = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY )
-
-derp,contours,hierarchy = cv2.findContours(im_bw,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
-
-print(len(contours))
+if __name__ == "__main__":
+    sample_path = 'samples/bc_ref/r_1.jpg'
