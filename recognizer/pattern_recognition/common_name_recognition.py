@@ -29,7 +29,7 @@ def similar(a, b):
 
 
 def scan_line(line, dict):
-    sub_tokens = [tok.decode('utf8').lower() for tok in line.split()]
+    sub_tokens = [tok.encode().decode('utf8').lower() for tok in line.split()]
     best_guess, best_name = 0, ''
 
     for sub_token in sub_tokens:
@@ -59,7 +59,8 @@ def find_best_guessed_name(tokens):
         en_guess, en_name = scan_line(token, common_name_en)
         jp_guess, jp_name = scan_line(token, common_name_jp)
         vi_guess, vi_name = scan_line(token, common_name_vi)
-        print((token, en_guess, en_name))
+        print("en" , (token, en_guess, en_name))
+        print("ja" , (token, jp_guess, jp_name))
 
         if en_guess > best_en_guess:
             best_en_guess, best_en_name, full_en_name = en_guess, en_name, token
