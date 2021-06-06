@@ -4,11 +4,6 @@ from db import mysql_query
 
 connection = mysql_connection.create_connection()
 
-list_item = mysql_query.select_query(connection)
+list_item = mysql_query.select_user(connection)
 
-for result in list_item:
-    for i in result:
-        if(i != None):
-            print(i)
-
-    print("**"*30)
+mysql_query.insert_query(connection)
