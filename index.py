@@ -36,7 +36,6 @@ def upload_file():
         filetypes=(("JPG File", "*.jpg"), ("PNG File", "*.png"), ("All File", "*.*")))
 
     if filename == "":
-        t.delete(1.0, END)
         tmsg.showwarning(title = 'Alert!', message = 'Please provide proper formatted image')
         return
     else:
@@ -60,8 +59,6 @@ def convert():
     print((' ' * 30))
     print((' * ' * 30))
     print((jsonpickle.encode(contact)))
-    t.delete(1.0, END)
-    t.insert(1.0, (jsonpickle.encode(contact)))
 
 
 
@@ -69,20 +66,10 @@ if __name__ == "__main__":
     root = Tk()
   
     # fixing geometry of GUI
-    root.geometry('800x500')        
-    root.maxsize(1000, 500)
-    root.minsize(600, 500)
+    root.geometry('800x600')        
+    root.maxsize(1000, 600)
+    root.minsize(600, 600)
     root.title('Visiting card scanner')
-
-    # Menu bar and navigation tab creation
-    mainmenu = Menu(root)
-    mainmenu.config(font = ('Times', 29))
-    
-    m1 = Menu(mainmenu, tearoff = 0)
-    m1.add_command(label = 'Scan/Upload Visiting or Bussiness cards and get all the text of cards',
-                font = ('Times', 13))
-    root.config(menu = mainmenu)
-    mainmenu.add_cascade(label = 'Aim', menu = m1)
     
     #title
     Label(text = 'Visiting card scanner', bg = '#FAD2B8',
@@ -108,21 +95,91 @@ if __name__ == "__main__":
     p_label_var.set('Please upload an image to scan')
     l = Label(textvariable=p_label_var, fg='red', bg='white')
     l.pack()
-    
-    #show result
-    t = Text(root, height='2', font=('Times', 13))
-    t.pack(side='bottom', fill='x')
-    t.insert(1.0, 'Text of converted card will be shown here...', END)
 
-    #convert lablel
-    c_label_var = StringVar()
-    c_label_var.set('Ready for conversion')
-    c_label = Label(textvariable=c_label_var)
-    c_label.pack(side='bottom', anchor='w')
+    #Frame other
+    f9 = Frame()
+    f9.config(bg='white')
+    laddress = Label(f9,text="Other:",width=7, height='1', font=('Times', 13))
+    laddress.pack(side='left')
+
+    taddress = Text(f9, height='1', font=('Times', 13))
+    taddress.pack(side='right', fill='x')
+    f9.pack(side="bottom")
+
+    #Frame address
+    f8 = Frame()
+    f8.config(bg='white')
+    laddress = Label(f8,text="Address:",width=7, height='1', font=('Times', 13))
+    laddress.pack(side='left')
+
+    taddress = Text(f8, height='1', font=('Times', 13))
+    taddress.pack(side='right', fill='x')
+    f8.pack(side="bottom")
+
+    #Frame website
+    f7 = Frame()
+    f7.config(bg='white')
+    lwebsite = Label(f7,text="Website:",width=7, height='1', font=('Times', 13))
+    lwebsite.pack(side='left')
+
+    twebsite = Text(f7, height='1', font=('Times', 13))
+    twebsite.pack(side='right', fill='x')
+    f7.pack(side="bottom")
+
+    #Frame phone
+    f6 = Frame()
+    f6.config(bg='white')
+    lphone = Label(f6,text="Phone:",width=7, height='1', font=('Times', 13))
+    lphone.pack(side='left')
+
+    tphone = Text(f6, height='1', font=('Times', 13))
+    tphone.pack(side='right', fill='x')
+    f6.pack(side="bottom")
+
+    #Frame email
+    f5 = Frame()
+    f5.config(bg='white')
+    lemail = Label(f5,text="Email:",width=7, height='1', font=('Times', 13))
+    lemail.pack(side='left')
+
+    temail = Text(f5, height='1', font=('Times', 13))
+    temail.pack(side='right', fill='x')
+    f5.pack(side="bottom")
+
+    #Frame company
+    f4 = Frame()
+    f4.config(bg='white')
+    lcompany = Label(f4,text="Company:",width=7, height='1', font=('Times', 13))
+    lcompany.pack(side='left')
+
+    tcompany = Text(f4, height='1', font=('Times', 13))
+    tcompany.pack(side='right', fill='x')
+    f4.pack(side="bottom")
+
+    #Frame job
+    f3 = Frame()
+    f3.config(bg='white')
+    ljob = Label(f3,text="Job:",width=7, height='1', font=('Times', 13))
+    ljob.pack(side='left')
+
+    tjob = Text(f3, height='1', font=('Times', 13))
+    tjob.pack(side='right', fill='x')
+    f3.pack(side="bottom")
+
+    #Frame name
+    f2 = Frame()
+    f2.config(bg='white')
+    lname = Label(f2,text="Name:",width=7, height='1', font=('Times', 13))
+    lname.pack(side='left')
+
+    tname = Text(f2, height='1', font=('Times', 13))
+    tname.pack(side='right', fill='x')
+    f2.pack(side="bottom")
 
     #button convert
     Button(root, text='Scan and Convert', bg='#F58D4B', font=('Times', 15),
         width=70, command=convert).pack(pady='10', side='bottom')
+
     root.mainloop()
 
 
