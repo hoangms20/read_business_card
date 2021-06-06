@@ -1,129 +1,82 @@
-# Visiting Card scanner GUI
-
-# imported tkinter library
 import os
-from tkinter import *
-import tkinter.messagebox as tmsg    
-  
-# Pillow library for importing images
-from PIL import Image, ImageTk
-  
-# library for filedialog (For file selection)
-from tkinter import filedialog
-import cv2
-  
-# Pytesseract module importing
-import pytesseract   
-import jsonpickle
-from recognizer.card_recognition import recognize_contact
-from recognizer.contact import Contact     
+import tkinter as tk
+import tkinter.ttk as ttk
+import pygubu
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\Users\Admin\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
-  
-root = Tk()
-  
-# fixing geometry of GUI
-root.geometry('800x500')        
-root.maxsize(1000, 500)
-root.minsize(600, 500)
-root.title('Visiting card scanner')
-  
-# function for uploading file to GUI
-def upload_file():        
-	global filename, img
-	global start, last
-	fln = filedialog.askopenfilename(initialdir=os.getcwd(),
-        title="Select Image File", 
-        filetypes=(("JPG File", "*.jpg"), ("PNG File", "*.png"), ("All File", "*.*")))
-      
-	if	filename == '':
-    	t.delete(1.0, END)
-    	t.insert(1.0, 'You have not provided any image to convert')
-        tmsg.showwarning(title = 'Alert!', message = 'Please provide proper formatted image')
-  		return
-	else:
-  	p_label_var.set('Image uploaded successfully')
-  	l.config(fg='#0CDD19')
-      
-    if filename.endswith('.JPG') or filename.endswith('.JPEG') or filename.endswith('.jpg') or filename.endswith('.jpeg') or filename.endswith('.PNG') or filename.endswith('.png'):
-    	filename_rev = filename[::-1]
-        last = filename.index('.')
-        start = len(filename) - filename_rev.index('/') - 1
+PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
+PROJECT_UI = os.path.join(PROJECT_PATH, "dashboard.ui")
 
-	
-  
-# function for conversion
-def convert():
-	gray = cv2.cvtColor(src = filename, code = cv2.COLOR_BGR2GRAY)
-	text = pytesseract.image_to_string(filename)
-	t.delete(1.0, END)
-	t.insert(1.0, text)
-	root1 = Toplevel()
-	root1.title('Uploaded image')
-	img1 = ImageTk.PhotoImage(Image.open(filename))
-	Label(root1, image=img1).pack()
-	root1.mainloop()
-  
-# Menu bar and navigation tab creation
-mainmenu = Menu(root)
-mainmenu.config(font = ('Times', 29))
-  
-m1 = Menu(mainmenu, tearoff = 0)
-m1.add_command(label = 'Scan/Upload Visiting or Bussiness cards and get all the text of cards',
-               font = ('Times', 13))
-root.config(menu = mainmenu)
-mainmenu.add_cascade(label = 'Aim', menu = m1)
-  
-m2 = Menu(mainmenu, tearoff = 0)
-m2.add_command(label = '|| Electronics and Communication engineering student ||', 
-               font = ('Times', 13))
-m2.add_command(label = '|| Coding Enthusiast ||', font = ('Times', 13))
-root.config(menu = mainmenu)
-mainmenu.add_cascade(label = 'About us', menu = m2)
-  
-m3 = Menu(mainmenu, tearoff=0)
-m3.add_command(label = 'E-mail: mathurkartik1234@gmail.com', 
-               font = ('Times', 13))
-m3.add_separator()
-m3.add_command(label = 'Mobile: +91-9587823004', font=('Times', 13))
-m3.add_separator()
-m3.add_command(label = 'LinkedIn: https://www.linkedin.com/in/kartik-mathur-97a825160',
-               font = ('Times', 13))
-root.config(menu = mainmenu)
-mainmenu.add_cascade(label = 'Contact us', menu = m3)
-  
-Label(text = 'Visiting card scanner', bg = '#FAD2B8',
-      fg = '#39322D', font = ('Times', 18)).pack(fill = 'x')
-Label(text = 'Python GUI', bg = '#FAD2B8', fg ='#39322D', font=(
-    'Times New Roman', 12, 'italic')).pack(fill='x')
-  
-f1 = Frame()
-f1.config(bg='white')
-Label(f1, text='Browse photo to upload', width=20,
-      font=('Times', 15), bg='white').pack(side='left')
-Label(f1, text='format: png/jpeg', bg='white',
-      width=30).pack(side='right', padx=5)
-Button(f1, text='Upload card', bg='#F58D4B', font=('Times', 15),
-       width=70, command=upload_file).pack(side='right')
-f1.pack(pady=10, fill='x')
-p_label_var = StringVar()
-p_label_var.set('Please upload an image to scan')
-l = Label(textvariable=p_label_var, fg='red', bg='white')
-l.pack()
-  
-Label(text='©copyright 2020', bg='#433E3B', fg='white',
-      font=('Times', 10)).pack(side='bottom', fill='x')
-Label(text='Developer: Kartik Mathur', bg='#433E3B', fg='white',
-      font=('Times', 10, ' italic')).pack(side='bottom', fill='x')
-t = Text(root, height='9', font=('Times', 13))
-t.pack(side='bottom', fill='x')
-t.insert(1.0, 'Text of converted card will be shown here...', END)
-c_label_var = StringVar()
-c_label_var.set('Output...')
-c_label = Label(textvariable=c_label_var)
-c_label.pack(side='bottom', anchor='w')
+class DashboardApp:
+    def __init__(self, master):
+        # build ui
+        self.dashboard = ttk.Frame(master)
 
-Button(root, text='Scan and Convert', bg='#F58D4B', font=('Times', 15),
-       width=70, command=convert).pack(pady='10', side='bottom')
+        self.button_scan = ttk.Button(self.dashboard)
+        self.cardicon_png = tk.PhotoImage(file='cardicon_png.png')
+        self.button_scan.configure(image=self.cardicon_png)
+        self.button_scan.grid(column='0', row='0')
+        self.button_scan.configure(command=self.scan)
 
-root.mainloop()
+        self.button_list = ttk.Button(self.dashboard)
+        self.list = tk.PhotoImage(file='list.png')
+        self.button_list.configure(image=self.list)
+        self.button_list.grid(column='1', row='0')
+        self.button_list.configure(command=self.search_list)
+
+        self.button_lookup = ttk.Button(self.dashboard)
+        self.Business_icon = tk.PhotoImage(file='Business_icon.png')
+        self.button_lookup.configure(image=self.Business_icon)
+        self.button_lookup.grid(column='2', row='0')
+        self.button_lookup.configure(command=self.look_up)
+
+        self.button_thongke = ttk.Button(self.dashboard)
+        self.metric = tk.PhotoImage(file='metric.png')
+        self.button_thongke.configure(image=self.metric)
+        self.button_thongke.grid(column='0', row='1')
+        self.button_thongke.configure(command=self.thong_ke)
+
+        self.button_doimk = ttk.Button(self.dashboard)
+        self.password = tk.PhotoImage(file='password.png')
+        self.button_doimk.configure(image=self.password)
+        self.button_doimk.grid(column='1', row='1')
+        self.button_doimk.configure(command=self.doi_mk)
+
+        self.button_exit = ttk.Button(self.dashboard)
+        self.exit_png = tk.PhotoImage(file='exit_png.png')
+        self.button_exit.configure(image=self.exit_png)
+        self.button_exit.grid(column='2', row='1')
+        self.button_exit.configure(command=self.exit)
+		
+        self.dashboard.configure(height='200', width='200')
+        self.dashboard.grid(column='0', row='0')
+
+        # Main widget
+        self.mainwindow = self.dashboard
+    
+    def scan(self):
+        pass
+
+    def look_up(self):
+        pass
+
+    def search_list(self):
+        pass
+
+    def thong_ke(self):
+        pass
+
+    def doi_mk(self):
+        pass
+
+    def exit(self):
+        pass
+
+    def run(self):
+        self.mainwindow.mainloop()
+
+
+if __name__ == '__main__':
+    root = tk.Tk()
+    app = DashboardApp(root)
+    app.run()
+
