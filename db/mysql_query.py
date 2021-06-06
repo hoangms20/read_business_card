@@ -4,7 +4,7 @@ import jsonpickle
 from . import mysql_connection
 
 
-def select_query(connection):
+def select_all(connection):
     
     cur = connection.cursor()
     
@@ -36,30 +36,32 @@ def select_user(connection):
 
     return item_list
 
-def update_query(connection):
+def update_pass(connection, val):
     print ("Start")
     cur = connection.cursor()
 
-    query = "UPDATE image_info SET image_title = 'Test', number_of_view = number_of_view + 1 WHERE image_id = 2"
+    sql = "UPDATE user SET Password = %s WHERE User = %s"
     
-    cur.execute(query)
+    cur.execute(sql, val)
     connection.commit()
-    print ("Finish")
+    print ("Finish update")
 
-def insert_query(connection):
+def insert_query(connection, val):
     print ("Start")
     cur = connection.cursor()
-    query = "INSERT INTO image_category(`cate_id`, `category_name`) VALUES (5, 'Gifs')";
+
+    sql = "INSERT INTO card_scaner ( `Name`, `Job`, `Company`, `Email`, `Phone`, `Website`, `Address`, `Other`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+    #sql = "INSERT INTO user (`User`, `Password`) VALUES (%s, %s)"
+    cur.execute(sql, val)
     
-    cur.execute(query)
     connection.commit()
-    print ("Finish")
+    print ("Finish insert")
 
 
-# if __name__ == "__main__":
-#     connection = mysql_connection.create_connection()
-# #     select_query(connection)
-# #    update_query(connection)
+if __name__ == "__main__":
+    connection = mysql_connection.create_connection()
 #     select_query(connection)
+#    update_query(connection)
+    select_all(connection)
 
     
