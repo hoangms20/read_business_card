@@ -18,10 +18,23 @@ def select_query(connection):
         item_list.append(result)
         print(result)
 
-    #print (jsonpickle.encode(item_list))
-
     return item_list
     
+def select_user(connection):
+    
+    cur = connection.cursor()
+    
+    query = "SELECT * FROM user;"
+    
+    cur.execute(query)
+    result_set = cur.fetchall()
+    item_list = []
+
+    for result in result_set:
+        item_list.append(result)
+        print(result)
+
+    return item_list
 
 def update_query(connection):
     print ("Start")
