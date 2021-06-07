@@ -2,7 +2,8 @@ import os
 import tkinter as tk
 from tkinter.constants import END
 import tkinter.ttk as ttk
-import tkinter.messagebox as tmsg  
+import tkinter.messagebox as tmsg
+from datetime import datetime
 
 # library for filedialog (For file selection)
 from tkinter import filedialog
@@ -226,9 +227,13 @@ class ScanApp:
         getweb = self.twebsite.get("1.0", END)
         getaddr = self.taddress.get("1.0", END)
         getother = self.tother.get("1.0", END)
+        
+        #get datetime
+        now = datetime.now()
+        dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
 
         # Insert Into Table
-        val = (getname[:len(getname) - 1], getjob[:len(getjob) - 1], getcompany[:len(getcompany) - 1], getemail[:len(getemail) - 1],
+        val = (dt_string, getname[:len(getname) - 1], getjob[:len(getjob) - 1], getcompany[:len(getcompany) - 1], getemail[:len(getemail) - 1],
                  getphone[:len(getphone) - 1], getweb[:len(getweb) - 1], getaddr[:len(getaddr) - 1], getother[:len(getother) - 1])
         print("**************val*****************")
         print(val)

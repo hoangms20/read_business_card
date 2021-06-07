@@ -1,3 +1,4 @@
+import lookup
 import login
 import doimk
 import scanapp
@@ -63,7 +64,10 @@ class DashboardApp:
         app.run
 
     def look_up(self):
-        pass
+        self.new_scan = tk.Toplevel(self.master)
+        self.new_scan.title("Lookup")
+        app = lookup.LookupApp(self.new_scan)
+        app.run
 
     def search_list(self):
         self.new_scan = tk.Toplevel(self.master)
