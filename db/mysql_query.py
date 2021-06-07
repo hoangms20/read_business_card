@@ -36,6 +36,51 @@ def select_user(connection):
 
     return item_list
 
+def selectbyname(connection, name):
+    
+    cur = connection.cursor()
+    
+    sql = "SELECT * FROM card_scaner WHERE Name LIKE '%" +  name + "%';"
+    cur.execute(sql)
+    result_set = cur.fetchall()
+    item_list = []
+
+    for result in result_set:
+        item_list.append(result)
+        print(result)
+
+    return item_list
+
+def selectbycompany(connection, company):
+    
+    cur = connection.cursor()
+    
+    sql = "SELECT * FROM card_scaner WHERE Company LIKE '%" +  company + "%';"
+    cur.execute(sql)
+    result_set = cur.fetchall()
+    item_list = []
+
+    for result in result_set:
+        item_list.append(result)
+        print(result)
+
+    return item_list
+
+def selectbyjob(connection, job):
+    
+    cur = connection.cursor()
+    
+    sql = "SELECT * FROM card_scaner WHERE Job LIKE '%" +  job + "%';"
+    cur.execute(sql)
+    result_set = cur.fetchall()
+    item_list = []
+
+    for result in result_set:
+        item_list.append(result)
+        print(result)
+
+    return item_list
+
 def update_pass(connection, val):
     print ("Start")
     cur = connection.cursor()
