@@ -16,3 +16,8 @@ def is_company_name(line):
         if line.__contains__(token):
             return True
     return False
+
+if __name__ == '__main__':
+    val = "Newbees co, Itd."
+    if (is_company_name(val)):
+        print("True")

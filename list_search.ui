@@ -32,7 +32,6 @@
               <property name="row">0</property>
               <property name="sticky">w</property>
               <property type="col" id="1" name="weight">0</property>
-              <property type="row" id="0" name="weight">1</property>
             </layout>
           </object>
         </child>
@@ -43,7 +42,6 @@
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
-              <property type="row" id="0" name="weight">1</property>
             </layout>
           </object>
         </child>
@@ -57,7 +55,6 @@
               <property name="row">0</property>
               <property name="sticky">w</property>
               <property type="col" id="0" name="weight">0</property>
-              <property type="row" id="0" name="weight">1</property>
             </layout>
           </object>
         </child>
@@ -70,7 +67,6 @@
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
-              <property type="row" id="0" name="weight">1</property>
             </layout>
           </object>
         </child>
@@ -85,7 +81,33 @@
               <property name="propagate">True</property>
               <property name="row">0</property>
               <property name="sticky">w</property>
-              <property type="row" id="0" name="weight">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="button_show">
+            <property name="command" type="command" cbtype="simple">show_detail</property>
+            <property name="text" translatable="yes">Show Detail</property>
+            <layout manager="grid">
+              <property name="column">6</property>
+              <property name="padx">10</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">e</property>
+              <property type="col" id="5" name="weight">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="button_export">
+            <property name="command" type="command" cbtype="simple">export_file</property>
+            <property name="text" translatable="yes">Export File Excel</property>
+            <layout manager="grid">
+              <property name="column">5</property>
+              <property name="padx">10</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">w</property>
             </layout>
           </object>
         </child>

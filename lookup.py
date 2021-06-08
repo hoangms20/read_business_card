@@ -1,3 +1,5 @@
+from export_excel import export_file
+from detail import DetailApp
 from tkinter.constants import CENTER, E, NO, W
 from db import mysql_connection, mysql_query
 import os
@@ -76,7 +78,6 @@ class LookupApp:
 
 
     def Lookup(self):
-        self.remove_all()
         column = self.combobox.get()
         val = self.enter_here.get()
         connection = mysql_connection.create_connection()
@@ -91,7 +92,10 @@ class LookupApp:
                     data = mysql_query.selectbycompany(connection, val)
                 else:
                     data = mysql_query.selectbyjob(connection, val)
+        
+        self.list_data = data
             
+        self.remove_all()
         count=0
 
         for record in data:
@@ -107,6 +111,19 @@ class LookupApp:
         records = self.treeview_lookup.get_children()
         for record in records:
             self.treeview_lookup.delete(record)
+
+    def show_detail(self):
+        # Grab record number
+        selected = self.treeview_lookup.focus()
+        # Grab record values
+        values = self.treeview_lookup.item(selected, 'values')
+
+        self.new_window = tk.Toplevel(self.mainwindow)
+        app = DetailApp(master= self.new_window, val= values)
+        app.run()
+
+    def export_file(self):
+        export_file(self.list_data)
 
     def run(self):
         self.mainwindow.mainloop()

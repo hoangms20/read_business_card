@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+from export_excel import export_file
+from detail import DetailApp
 import os
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -114,6 +116,7 @@ class ListSearchApp:
             tmsg.showwarning(title = 'Alert!', message = 'You Entered Wrong Value!')
             return
         
+        self.list_data = data
         self.remove_all()
         count=0
 
@@ -124,6 +127,19 @@ class ListSearchApp:
                 self.treeview_list.insert(parent='', index='end', iid=count, text="", values=(str(count), record[9], record[1], record[2], record[3], record[4], record[5], record[6], record[7], record[8]), tags=('oddrow'))
 
             count += 1
+
+    def show_detail(self):
+        # Grab record number
+        selected = self.treeview_list.focus()
+        # Grab record values
+        values = self.treeview_list.item(selected, 'values')
+
+        self.new_window = tk.Toplevel(self.mainwindow)
+        app = DetailApp(master= self.new_window, val= values)
+        app.run()
+
+    def export_file(self):
+        export_file(self.list_data)
 
     def run(self):
         self.mainwindow.mainloop()

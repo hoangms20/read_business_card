@@ -5,10 +5,9 @@ class Contact(object):
         self.name = 'N/A'
         self.emails = []
         self.phones = []
-        self.job_title = 'N/A'
+        self.job_title = []
         self.company = 'N/A'
         self.website = 'N/A'
         self.addr = []
-        self.other_info = {}
-
+        self.other_info = []
 

@@ -33,7 +33,7 @@ class ScanApp:
         
         #title
         tk.Label(self.master, text = 'Visiting card scanner', bg = '#FAD2B8',
-            fg = '#39322D', font = ('Times', 18)).pack(fill = 'x')
+            fg = '#39322D', font = ('Times', 18, 'bold')).pack(fill = 'x')
         tk.Label(self.master, text = 'Python GUI', bg = '#FAD2B8', fg ='#39322D', font=(
             'Times New Roman', 12, 'italic')).pack(fill='x')
         
@@ -75,7 +75,7 @@ class ScanApp:
         #Frame other
         f9 = tk.Frame(self.master)
         f9.config(bg='white')
-        lother = tk.Label(f9,text="Other:",width=7, height='1', font=('Times', 13))
+        lother = tk.Label(f9,text="Others:",width=7, height='1', font=('Times', 13))
         lother.pack(side='left')
 
         self.tother = tk.Text(f9, height='1', font=('Times', 13))
@@ -216,6 +216,9 @@ class ScanApp:
 
         self.taddress.delete(1.0, END)
         self.taddress.insert(1.0, contact.addr)
+
+        self.tother.delete(1.0, END)
+        self.tother.insert(1.0, contact.other_info)
         
     def save_data(self):
         # get data

@@ -1,4 +1,5 @@
 import os
+import re
 path = os.path.dirname(os.path.abspath(__file__))
 
 from difflib import SequenceMatcher
@@ -14,14 +15,17 @@ MIN_LENGTH = 5
 with open(file= path + '/../data/common_name_en', mode='r', encoding="utf8") as en_name:
     for line in en_name:
         name = line.strip().lower()
-        if len(name) >= MIN_LENGTH:
-            common_name_en.append(name)
+        common_name_en.append(name)
 
 with open(file= path + '/../data/common_name_jp', mode='r', encoding="utf8") as jp_name:
     for line in jp_name:
         name = line.strip().lower()
-        if len(name) >= MIN_LENGTH:
-            common_name_jp.append(name)
+        common_name_jp.append(name)
+
+with open(file= path + '/../data/common_name_vi', mode='r', encoding="utf8") as vi_name:
+    for line in vi_name:
+        name = line.strip().lower()
+        common_name_vi.append(name)
 
 
 def similar(a, b):
@@ -87,7 +91,10 @@ def find_best_guessed_name(tokens):
 
 
 def is_name(token):
-    sub_tokens = [tok.decode('utf8').lower() for tok in token.split()]
+    sub_tokens = [tok.encode().decode('utf8').lower() for tok in token.split()]
+    a= len(sub_tokens)
+    if (a <= 1 or a >= 3):
+        return False
 
     for sub_token in sub_tokens:
         if is_en_name(sub_token) or is_jp_name(sub_token) or is_vn_name(sub_token):
@@ -96,14 +103,74 @@ def is_name(token):
 
 
 def is_jp_name(token):
+    sub_tokens = [tok.encode().decode('utf8').lower() for tok in token.split()]
+    a= len(sub_tokens)
+    m = re.findall(r'\w', token)
+    n = re.findall(r'\d', token)
+
+
+    if(len(token) - a + 1 != len(m) - len(n)):
+        return False
+
+    if (a <= 1 or a >= 4):
+        return False
+
+    for sub_token in sub_tokens:
+        for name_jp in common_name_jp:
+            if sub_token == name_jp:
+                return True
     return False
 
 
 def is_vn_name(token):
+    sub_tokens = [tok.encode().decode('utf8').lower() for tok in token.split()]
+    a= len(sub_tokens)
+
+    m = re.findall(r'\w', token)
+    n = re.findall(r'\d', token)
+
+    if(len(token) - a + 1 != len(m) - len(n)):
+        return False
+
+    if (a <= 2 or a >= 5):
+        return False
+
+    first_name = sub_tokens[0] +' ' + sub_tokens[1]
+
+    for name_vi in common_name_vi:
+        if first_name == name_vi:
+            return True
+
     return False
 
 
 def is_en_name(token):
-    best_guess, name = check(token, common_name_en)
-    if best_guess > SIMILAR_THRESHOLD:
-        return True
+    # best_guess, name = check(token, common_name_en)
+    # if best_guess > SIMILAR_THRESHOLD:
+    #     return True
+
+    sub_tokens = [tok.encode().decode('utf8').lower() for tok in token.split()]
+    a= len(sub_tokens)
+    m = re.findall(r'\w', token)
+    n = re.findall(r'\d', token)
+
+
+    if(len(token) - a + 1 != len(m) - len(n)):
+        return False
+
+    if (a <= 1 or a >= 4):
+        return False
+
+    for sub_token in sub_tokens:
+        for name_en in common_name_en:
+            if sub_token == name_en:
+                return True
+    return False
+
+if __name__ == '__main__':
+    val = "Masuo Fukada"
+    if(is_en_name(val) or is_jp_name(val) or is_vn_name(val)):
+        print("True")
+
+    else:
+        print("False")

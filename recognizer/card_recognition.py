@@ -16,6 +16,7 @@ from . import card_region_detector as region_detector
 from PIL import Image
 
 from .contact import Contact
+from array import *
 
 DEBUG = False
 
@@ -27,28 +28,86 @@ def recognize_contact(img_path):
     tokens = tokenizer(txt)
     contact = Contact()
 
+    mask = array('i', [])
+
     for token in tokens:
+        mask.append(0)
         print(token)
 
-    print("****find name****")
-    contact.name = name_recog.find_best_guessed_name(tokens)[2]
-    print("****other****")
+    
+
+    print("****find****")
+    #contact.name = name_recog.find_best_guessed_name(tokens)[2]
+    i = -1
+    l = len(mask)
 
     for token in tokens:
-        if is_address(token):
-            contact.addr.append(token)
-        if is_email(token):
-            contact.emails.append(token)
-        if is_phone(token):
-            contact.phones.append(token)
-        if is_job_title(token):
-            contact.job_title = token
+        i += 1
+
+        if mask[i] != 0 :
+            continue
+
         if is_website(token):
+            mask[i] = 1
             contact.website = token
+            continue
+
+        if is_email(token):
+            mask[i] = 2
+            contact.emails.append(token)
+            continue
+
+        if is_phone(token):
+            mask[i] = 3
+            contact.phones.append(token)
+            continue
+
+        if is_job_title(token):
+            mask[i] = 4
+            contact.job_title.append(token)
+            continue
+
+        if is_address(token):
+            mask[i] = 5
+            contact.addr.append(token)
+            continue
+
         if is_company_name(token):
+            mask[i] = 6
             contact.company = token
+            continue
+
+        if name_recog.is_en_name(token) or name_recog.is_jp_name(token) or name_recog.is_vn_name(token):
+            mask[i] = 7
+            contact.name = token
+            continue
+        
+        j = i - 1
+        if(j >= 0 and j <= l - 1):
+            if mask[j] == 4 or mask[j] == 7:
+                mask[i] = 4
+                contact.job_title.append(token)
+                continue
+            
+            if mask[j] == 5 and tokens[j][len(tokens[j]) - 1] == ',':
+                mask[i] = 5
+                lengcon = len(contact.addr)
+                contact.addr[lengcon - 1] += token
+                continue
+
+            if mask[j] == 6:
+                mask[i] = 5
+                contact.addr.append(token)
+                continue
+
+        contact.other_info.append(token)
+        
     print("****finished****")
     print(tokens)
+    i = -1
+    for token in tokens:
+        i+=1
+        print(token +"-------" + str(mask[i]))
     return contact
 
 
