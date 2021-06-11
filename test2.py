@@ -1,36 +1,27 @@
-import spacy
+from tkinter import *
+from PIL import Image, ImageTk
 
-text = """
-Some economists have responded positively to Bitcoin, including 
-Francois R.Velde, senior economist of the Federal Reserve in Chicago 
-who described it as "an elegant solution to the problem of creating a 
-digital currency." In November 2013 Richard Branson announced that 
-Virgin Galactic would accept Bitcoin as payment, saying that he had invested 
-in Bitcoin and found it "fascinating how a whole new global currency 
-has been created", encouraging others to also invest in Bitcoin.
-Other economists commenting on Bitcoin have been critical. 
-Economist Paul Krugman has suggested that the structure of the currency 
-incentivizes hoarding and that its value derives from the expectation that 
-others will accept it as payment. Economist Larry Summers has expressed 
-a "wait and see" attitude when it comes to Bitcoin. Nick Colas, a market 
-strategist for ConvergEx Group, has remarked on the effect of increasing 
-use of Bitcoin and its restricted supply, noting, "When incremental 
-adoption meets relatively fixed supply, it should be no surprise that 
-prices go up. And that’s exactly what is happening to BTC prices."
-"""
+class GUI:
 
-nlp = spacy.load("en_core_web_sm")
+    def __init__(self, master):
 
-def find_persons(text):
-     # Create Doc object
-     doc2 = nlp(text)
-     # Identify the persons
-     persons = [ent.text for ent in doc2.ents if ent.label_ == 'PERSON']
+        frame = Frame(master)
+        frame.pack()
 
-     # Return persons
-     return persons
+        #status bar
+        self.bar = Frame(root, relief=RIDGE, borderwidth=5)
+        self.bar.pack(side=TOP)
 
-persons = find_persons(text)
+        self.iconPath = 'r_13.jpg'
+        self.icon = ImageTk.PhotoImage(Image.open(self.iconPath))
+        self.icon_size = Label(self.bar)
+        self.icon_size.image = self.icon  # <== this is were we anchor the img object
+        self.icon_size.configure(image=self.icon)
+        self.icon_size.pack(side=LEFT)
 
-for person in persons:
-     print(person)
+root = Tk()
+
+
+app = GUI(root)
+
+root.mainloop()

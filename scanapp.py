@@ -1,3 +1,4 @@
+from adjust_image import AdjustImageApp
 import os
 import tkinter as tk
 from tkinter.constants import END
@@ -6,7 +7,7 @@ import tkinter.messagebox as tmsg
 from datetime import datetime
 
 # library for filedialog (For file selection)
-from tkinter import filedialog
+from tkinter import Toplevel, filedialog
 
 # Pillow library for importing images
 from PIL import Image, ImageTk
@@ -177,17 +178,21 @@ class ScanApp:
             tmsg.showwarning(title = 'Alert!', message = 'Please provide proper formatted image')
             return
         else:
-            image_size = 800
-            img = Image.open(filename)
-            orig_width, orig_height = img.size
-            scale = (orig_height / orig_width) * image_size
-            img = ImageTk.PhotoImage(img.resize((image_size, int(scale)), Image.ANTIALIAS))
-            root1 = tk.Toplevel()
-            root1.geometry('800x800')        
-            root1.title("Image upload")
-            tk.Label(root1, image=img).pack()
+            # image_size = 800
+            # img = Image.open(filename)
+            # orig_width, orig_height = img.size
+            # scale = (orig_height / orig_width) * image_size
+            # img = ImageTk.PhotoImage(img.resize((image_size, int(scale)), Image.ANTIALIAS))
+            # root1 = tk.Toplevel()
+            # root1.geometry('800x800')        
+            # root1.title("Image upload")
+            # tk.Label(root1, image=img).pack()
             p_label_var.set("Image uploaded successfully")
             l.config(fg = '#0CDD19')
+            self.new_window = Toplevel(self.master)
+            self.new_window.title("Show Card")
+            self.adjust_image_app = AdjustImageApp(master=self.new_window,file_path= filename)
+            self.adjust_image_app.run()
 
         return
 
