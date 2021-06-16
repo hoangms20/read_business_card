@@ -1,4 +1,4 @@
-from adjust_image import AdjustImageApp
+
 import os
 import tkinter as tk
 from tkinter.constants import END
@@ -16,10 +16,17 @@ from PIL import Image, ImageTk
 import jsonpickle
 from recognizer.card_recognition import recognize_contact
 from recognizer.contact import Contact
+from recognizer import document_detect
+from adjust_image import AdjustImageApp
 
 #import db
 from db import mysql_connection
 from db import mysql_query
+
+#import pytesseract
+import pytesseract
+
+pytesseract.pytesseract.tesseract_cmd = r'C:\Users\Admin\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
 
 #Scan GUI
 class ScanApp:
@@ -197,10 +204,11 @@ class ScanApp:
         return
 
     def convert(self):
-        contact = recognize_contact(filename)
-        print((' ' * 30))
-        print((' * ' * 30))
-        print((jsonpickle.encode(contact)))
+        tokens = document_detect.extract_text(self.adjust_image_app.info_img)
+
+        contact = Contact()
+        contact.process_data(tokens= tokens)
+
         self.tname.delete(1.0, END)
         self.tname.insert(1.0, contact.name)
 
