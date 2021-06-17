@@ -6,6 +6,7 @@ import os
 import tkinter as tk
 import tkinter.ttk as ttk
 import pygubu
+import tkinter.messagebox as tmsg  
 
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 PROJECT_UI = os.path.join(PROJECT_PATH, "lookup.ui")
@@ -18,6 +19,7 @@ class LookupApp:
         self.mainwindow = builder.get_object('toplevel_lookup', master)
         builder.connect_callbacks(self)
 
+        self.label_soluong = builder.get_object('soluong', master)
         self.combobox = builder.get_object('title_search', master)
         self.combobox['values'] = ['Show All'] + ['Name'] + ['Company'] + ['Job']
         self.combobox.current(0)
@@ -76,6 +78,8 @@ class LookupApp:
         my_tree.tag_configure('oddrow', background="white")
         my_tree.tag_configure('evenrow', background="lightblue")
 
+        self.Lookup()
+
 
     def Lookup(self):
         column = self.combobox.get()
@@ -105,6 +109,8 @@ class LookupApp:
                 self.treeview_lookup.insert(parent='', index='end', iid=count, text="", values=(str(count), record[9], record[1], record[2], record[3], record[4], record[5], record[6], record[7], record[8]), tags=('oddrow'))
 
             count += 1
+        
+        self.label_soluong.configure(text="Tong so: " + str(count))
 
     # Remove all records
     def remove_all(self):
@@ -124,6 +130,8 @@ class LookupApp:
 
     def export_file(self):
         export_file(self.list_data)
+        tmsg.showinfo(
+            title = 'Alert!', message = "Export Successfully!")
 
     def run(self):
         self.mainwindow.mainloop()

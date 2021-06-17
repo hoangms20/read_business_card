@@ -18,15 +18,15 @@ def check(email):
     return False
 
 def is_email(txt):
-    #txt = txt.encode().decode('utf8').lower()
-    # return (len(txt) >= 5 and txt.find("@") > 0 and txt.find(".") > 0)
+    txt = txt.encode().decode('utf8').lower()
+    return (len(txt) >= 5 and txt.find("@") > 0 and txt.find(".") > 0)
 
-    emails =  txt.split()
-    for res in emails:
-        if check(res):
-            return True
+    # emails =  txt.split()
+    # for res in emails:
+    #     if check(res):
+    #         return True
 
-    return False
+    # return False
 
 if __name__ == '__main__':
  

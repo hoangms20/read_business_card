@@ -22,6 +22,7 @@ class ListSearchApp:
 
         self.from_day = builder.get_object('from_day', master)
         self.to_day = builder.get_object('to_day', master)
+        self.label_soluong = builder.get_object('soluong', master)
 
         self.treeview_list = builder.get_object('treeview', master)
 
@@ -74,6 +75,8 @@ class ListSearchApp:
         # Create striped row tags
         my_tree.tag_configure('oddrow', background="white")
         my_tree.tag_configure('evenrow', background="lightblue")
+
+        self.search_list()
 
 
     # Remove all records
@@ -128,6 +131,8 @@ class ListSearchApp:
 
             count += 1
 
+        self.label_soluong.configure(text="Tong so: " + str(count))
+
     def show_detail(self):
         # Grab record number
         selected = self.treeview_list.focus()
@@ -140,6 +145,8 @@ class ListSearchApp:
 
     def export_file(self):
         export_file(self.list_data)
+        tmsg.showinfo(
+            title = 'Alert!', message = "Export Successfully!")
 
     def run(self):
         self.mainwindow.mainloop()

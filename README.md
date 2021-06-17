@@ -2,10 +2,10 @@ BUSINESS CARD RECOGNITION
 ---------------
 
 Tool for extract information: `name`, `email`, `phone`, `address`, `job title`, `website` from Business card.
-Current supported languages: `English`, and `Japanese (Romaji)`
+Current supported languages: `English`, and `Japanese (Vietnamese)`
 
 # Dependencies
- - Python 2
+ - Python 3
  - OpenCV
  - Numpy
  - PIL (Python Image Library)
@@ -13,14 +13,10 @@ Current supported languages: `English`, and `Japanese (Romaji)`
 
 # How to run
 
-#### Step 1. Start Flask app
+#### Step 1. Start login app
 
-```
-python3 index.py
-```
+#### Step 2. Click upload 
 
-#### Step 2. Click upload then wait for the result
+#### Step 3. Conver then wait for the result
 
-# Example
-
-![samples/demo.png](samples/demo.png)
+#### Step 4. Click save

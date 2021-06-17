@@ -58,9 +58,12 @@ def extract_text(info_image):
         # imgAdaptiveThre=cv2.medianBlur(imgAdaptiveThre,3)
         T = threshold_local(imgWarpGray, 21, offset = 10, method = "gaussian")
         imgWarpGray = (imgWarpGray > T).astype("uint8") * 255
+        pil_img = Image.fromarray(imgWarpColored)
+        txt = pytesseract.image_to_string(pil_img, lang='eng')
+    else: 
+        pil_img = Image.fromarray(imgGray)
+        txt = pytesseract.image_to_string(pil_img, lang='eng')
 
-    pil_img = Image.fromarray(grayimg)
-    txt = pytesseract.image_to_string(pil_img, lang='eng')
     lines = txt.split("\n")
     tokens = []
     for line in lines:

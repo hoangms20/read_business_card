@@ -1,4 +1,5 @@
 import lookup
+import thongkeapp
 import login
 import doimk
 import scanapp
@@ -76,7 +77,10 @@ class DashboardApp:
         app.run
 
     def thong_ke(self):
-        pass
+        self.new_scan = tk.Toplevel(self.master)
+        self.new_scan.title("Thong ke Bao cao")
+        app = thongkeapp.ThongkeApp(master= self.new_scan)
+        app.run
 
     def doi_mk(self):
         self.new_scan = tk.Toplevel(self.master)

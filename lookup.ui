@@ -107,6 +107,18 @@
             </layout>
           </object>
         </child>
+        <child>
+          <object class="ttk.Label" id="soluong">
+            <property name="text" translatable="yes">Tong so: </property>
+            <layout manager="grid">
+              <property name="column">0</property>
+              <property name="padx">20</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
       </object>
     </child>
     <child>
